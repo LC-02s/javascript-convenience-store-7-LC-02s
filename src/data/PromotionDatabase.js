@@ -11,6 +11,11 @@ class PromotionDatabase {
     const promotionCSV = readFileSync(DATA_PATH.PROMOTION_CSV);
     this.#data = parseCSV(promotionCSV);
   }
+
+  /** @param {Pick<Promotion, 'name'>} query */
+  findByName({ name }) {
+    return this.#data.find((promotion) => promotion.name === name);
+  }
 }
 
 export default PromotionDatabase;
