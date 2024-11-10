@@ -6,6 +6,8 @@ import {
 } from '../constants/index.js';
 import { Exception, getUserInputLoop } from '../utils/index.js';
 
+/** @typedef {import('../types/index.js').Product} Product */
+
 class InputView {
   static async readProductSelection() {
     const { PREFIX, POSTFIX, SEPARATOR } = PRODUCT_INPUT;
@@ -13,6 +15,20 @@ class InputView {
     const input = await InputView.#readUserInput(guide);
 
     return input.split(',');
+  }
+
+  /** @param {Pick<Product, 'name' | 'quantity'>} product */
+  static async confirmAdditionalFreeProduct({ name, quantity }) {
+    return await InputView.#generateConfirmReader({
+      guide: `현재 ${name}은(는) ${quantity}개를 무료로 더 받을 수 있습니다. 추가하시겠습니까?`,
+    });
+  }
+
+  /** @param {Pick<Product, 'name' | 'quantity'>} product */
+  static async confirmPurchaseWithoutDiscount({ name, quantity }) {
+    return await InputView.#generateConfirmReader({
+      guide: `현재 ${name} ${quantity}개는 프로모션 할인이 적용되지 않습니다. 그래도 구매하시겠습니까?`,
+    });
   }
 
   /** @param {{ guide: string }} param */
