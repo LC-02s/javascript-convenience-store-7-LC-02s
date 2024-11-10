@@ -47,4 +47,23 @@ describe('상품 데이터베이스 테스트', () => {
       });
     });
   });
+
+  test('상품 데이터베이스는 이름과 수량을 입력할 시 해당하는 상품의 수량을 조정한다.', () => {
+    [
+      [5, 5, 10],
+      [10, 0, 10],
+      [11, 0, 9],
+      [15, 0, 5],
+      [20, 0, 0],
+    ].forEach(([quantity, expectedQuantity1, expectedQuantity2]) => {
+      const productDB = new ProductDatabase();
+
+      productDB.putProductQuantityByName({ name: '콜라', quantity });
+
+      const [result1, result2] = productDB.findByName({ name: '콜라' });
+
+      expect(result1.quantity).toBe(expectedQuantity1);
+      expect(result2.quantity).toBe(expectedQuantity2);
+    });
+  });
 });
