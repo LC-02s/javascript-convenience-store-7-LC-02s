@@ -17,20 +17,39 @@ class Cart {
   constructor(inputs, productDB) {
     this.#productDB = productDB;
     this.#productList = new Map();
-    this.addProduct(inputs);
+    this.addProductList(inputs);
   }
 
   /** @param {string[]} inputs */
-  addProduct(inputs) {
+  addProductList(inputs) {
     ProductValidator.validate(inputs, this.#productDB);
-    ProductValidator.parseInput(inputs).forEach(({ name, quantity }) => {
-      if (this.#productList.has(name)) {
-        this.#productList.set(name, this.#productList.get(name) + quantity);
-        return;
-      }
-
-      this.#productList.set(name, quantity);
+    ProductValidator.parseInput(inputs).forEach((product) => {
+      this.addProduct(product);
     });
+  }
+
+  /** @param {Pick<Product, 'name' | 'quantity'>} product */
+  addProduct({ name, quantity }) {
+    if (this.#productList.has(name)) {
+      this.#productList.set(name, this.#productList.get(name) + quantity);
+      return;
+    }
+
+    this.#productList.set(name, quantity);
+  }
+
+  /** @param {Pick<Product, 'name' | 'quantity'>} product */
+  removeProduct({ name, quantity }) {
+    if (!this.#productList.has(name)) return;
+
+    const prevQuantity = this.#productList.get(name) ?? 0;
+
+    if (prevQuantity <= quantity) {
+      this.#productList.delete(name);
+      return;
+    }
+
+    this.#productList.set(name, prevQuantity - quantity);
   }
 
   getProductList() {
