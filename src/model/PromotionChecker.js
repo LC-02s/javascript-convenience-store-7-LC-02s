@@ -19,6 +19,69 @@ class PromotionChecker {
     this.#promotionDB = new PromotionDatabase();
   }
 
+  /**
+   * @param {Pick<Product, 'name' | 'quantity'>} product
+   * @returns {{ type: 'stock' | 'additional', quantity: number; } | null}
+   */
+  compare(product) {
+    const promotionProduct = this.#productDB.findWithPromotionByName(product);
+
+    if (!promotionProduct) return null;
+
+    const promotion = this.#getValidPromotion(promotionProduct.promotion);
+
+    if (!promotion) return null;
+
+    return this.#computeResult({ product, promotionProduct, promotion });
+  }
+
+  /**
+   * @param {{ product: Pick<Product, 'name' | 'quantity'>; promotionProduct: Product; promotion: Promotion; }} param
+   * @returns {{ type: 'stock' | 'additional', quantity: number; } | null}
+   */
+  #computeResult({ product, promotionProduct: { quantity }, promotion }) {
+    if (quantity < product.quantity) {
+      const unit = promotion.buy + promotion.get;
+      const count = Math.floor(quantity / unit);
+      const shortfall = quantity - unit * count;
+      const stock = product.quantity - quantity + shortfall;
+
+      return { type: 'stock', quantity: stock };
+    }
+
+    return this.#computeAdditionalProduct({ product, promotion });
+  }
+
+  /**
+   * @param {{ product: Pick<Product, 'name' | 'quantity'>; promotion: Promotion; }} param
+   * @returns {{ type: 'additional', quantity: number; } | null}
+   */
+  #computeAdditionalProduct({
+    product: { quantity },
+    promotion: { get, buy },
+  }) {
+    const unit = buy + get;
+    const count = Math.floor(quantity / unit);
+    const rest = quantity - unit * count;
+
+    if (rest === buy) {
+      return { type: 'additional', quantity: get };
+    }
+
+    return null;
+  }
+
+  /** @param {Promotion['name']} name */
+  #getValidPromotion(name) {
+    const promotion = this.#promotionDB.findByName({ name });
+
+    if (!promotion || !this.#isValidPromotion(promotion)) {
+      return null;
+    }
+
+    return promotion;
+  }
+
   /** @param {Pick<Promotion, 'start_date' | 'end_date'>} promotion */
   #isValidPromotion({ start_date, end_date }) {
     const getTime = (value) => new Date(value).getTime();

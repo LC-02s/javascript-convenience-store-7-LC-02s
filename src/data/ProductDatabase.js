@@ -26,6 +26,13 @@ class ProductDatabase {
   }
 
   /** @param {Pick<Product, 'name'>} query */
+  findWithPromotionByName({ name }) {
+    return this.#data.find((product) => {
+      return !!product.promotion && product.name === name;
+    });
+  }
+
+  /** @param {Pick<Product, 'name'>} query */
   findByName({ name }) {
     return this.#data.filter((product) => product.name === name);
   }
