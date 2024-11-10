@@ -19,21 +19,21 @@ class ProductValidator {
    * @param {ProductDatabase} productDB
    */
   static #validateProductAll(inputs, productDB) {
-    const userProducts = ProductValidator.parseInput(inputs);
-    const productsMap = ProductValidator.#getProductsMap(userProducts);
+    const userProductList = ProductValidator.parseInput(inputs);
+    const productMap = ProductValidator.#getProductMap(userProductList);
 
-    [...productsMap.entries()].forEach(([name, quantity]) => {
+    [...productMap.entries()].forEach(([name, quantity]) => {
       ProductValidator.#validateProductType({ name, quantity });
       ProductValidator.#validateData({ name, quantity }, productDB);
     });
   }
 
   /**
-   * @param {Pick<Product, "name" | "quantity">[]} products
-   * @returns {Map<Pick<Product, "name">["name"], Pick<Product, "quantity">["quantity"]>}
+   * @param {Pick<Product, 'name' | 'quantity'>[]} productList
+   * @returns {Map<Product['name'], Product['quantity']>}
    */
-  static #getProductsMap(products) {
-    return products.reduce((map, { name, quantity }) => {
+  static #getProductMap(productList) {
+    return productList.reduce((map, { name, quantity }) => {
       if (map.has(name)) {
         return map.set(name, map.get(name) + quantity);
       }
@@ -119,25 +119,25 @@ class ProductValidator {
    * @param {ProductDatabase} productDB
    */
   static #validateData({ name, quantity }, productDB) {
-    const targetProducts = productDB.findByName({ name });
+    const targetProductList = productDB.findByName({ name });
 
-    ProductValidator.#validateProductNotFound(targetProducts);
-    ProductValidator.#validateProductStockQuantity(quantity, targetProducts);
+    ProductValidator.#validateProductNotFound(targetProductList);
+    ProductValidator.#validateProductStockQuantity(quantity, targetProductList);
   }
 
-  /** @param {Product[]} products */
-  static #validateProductNotFound(products) {
-    if (products.length < 1) {
+  /** @param {Product[]} productList */
+  static #validateProductNotFound(productList) {
+    if (productList.length < 1) {
       throw new Exception(ERROR_MESSAGE.PRODUCT_NOT_FOUND);
     }
   }
 
   /**
    * @param {number} quantity
-   * @param {Product[]} products
+   * @param {Product[]} productList
    */
-  static #validateProductStockQuantity(requiredQuantity, products) {
-    const totalStockQuantity = products.reduce((total, product) => {
+  static #validateProductStockQuantity(requiredQuantity, productList) {
+    const totalStockQuantity = productList.reduce((total, product) => {
       return total + product.quantity;
     }, 0);
 

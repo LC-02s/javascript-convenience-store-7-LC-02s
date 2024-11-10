@@ -41,9 +41,9 @@ describe('장바구니 클래스 테스트', () => {
 
     const cart = new Cart(input, productDB);
 
-    const products = cart.getProducts();
+    const productList = cart.getProductList();
 
-    products.forEach(({ name, quantity }) => {
+    productList.forEach(({ name, quantity }) => {
       expect(testResults[name]).toBe(quantity);
     });
   });
@@ -52,22 +52,22 @@ describe('장바구니 클래스 테스트', () => {
     const firstResults = { 콜라: 6, 감자칩: 1 };
     const firstInput = '[콜라-2],[감자칩-1],[콜라-2],[콜라-2]'.split(',');
 
-    const lastResults = { 콜라: 8, 감자칩: 2 };
-    const lastInput = '[콜라-2],[감자칩-1]'.split(',');
-
     const cart = new Cart(firstInput, productDB);
 
-    const firstProducts = cart.getProducts();
+    const firstProductList = cart.getProductList();
 
-    firstProducts.forEach(({ name, quantity }) => {
+    firstProductList.forEach(({ name, quantity }) => {
       expect(firstResults[name]).toBe(quantity);
     });
 
-    cart.addProduct(lastInput, productDB);
+    const lastResults = { 콜라: 8, 감자칩: 2 };
+    const lastInput = '[콜라-2],[감자칩-1]'.split(',');
 
-    const lastProducts = cart.getProducts();
+    cart.addProduct(lastInput);
 
-    lastProducts.forEach(({ name, quantity }) => {
+    const lastProductList = cart.getProductList();
+
+    lastProductList.forEach(({ name, quantity }) => {
       expect(lastResults[name]).toBe(quantity);
     });
   });

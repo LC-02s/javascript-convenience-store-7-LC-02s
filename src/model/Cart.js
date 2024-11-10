@@ -4,36 +4,37 @@ import ProductValidator from './ProductValidator.js';
 /** @typedef {import('../types/index.js').Product} Product */
 
 class Cart {
-  /** @type {Map<Pick<Product, 'name'>['name'], Pick<Product, 'quantity'>['quantity']>} */
-  #products;
+  /** @type {Map<Product['name'], Product['quantity']>} */
+  #productList;
+
+  /** @type {ProductDatabase} */
+  #productDB;
 
   /**
    * @param {string[]} inputs
    * @param {ProductDatabase} productDB
    */
   constructor(inputs, productDB) {
-    this.#products = new Map();
-    this.addProduct(inputs, productDB);
+    this.#productDB = productDB;
+    this.#productList = new Map();
+    this.addProduct(inputs);
   }
 
-  /**
-   * @param {string[]} inputs
-   * @param {ProductDatabase} productDB
-   */
-  addProduct(inputs, productDB) {
-    ProductValidator.validate(inputs, productDB);
+  /** @param {string[]} inputs */
+  addProduct(inputs) {
+    ProductValidator.validate(inputs, this.#productDB);
     ProductValidator.parseInput(inputs).forEach(({ name, quantity }) => {
-      if (this.#products.has(name)) {
-        this.#products.set(name, this.#products.get(name) + quantity);
+      if (this.#productList.has(name)) {
+        this.#productList.set(name, this.#productList.get(name) + quantity);
         return;
       }
 
-      this.#products.set(name, quantity);
+      this.#productList.set(name, quantity);
     });
   }
 
-  getProducts() {
-    return [...this.#products.entries()].map(([name, quantity]) => {
+  getProductList() {
+    return [...this.#productList.entries()].map(([name, quantity]) => {
       return { name, quantity };
     });
   }
