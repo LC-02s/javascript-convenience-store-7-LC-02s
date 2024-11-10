@@ -61,14 +61,48 @@ describe('장바구니 클래스 테스트', () => {
     });
 
     const lastResults = { 콜라: 8, 감자칩: 2 };
-    const lastInput = '[콜라-2],[감자칩-1]'.split(',');
 
-    cart.addProduct(lastInput);
+    cart.addProduct({ name: '콜라', quantity: 2 });
+    cart.addProduct({ name: '감자칩', quantity: 1 });
 
     const lastProductList = cart.getProductList();
 
     lastProductList.forEach(({ name, quantity }) => {
       expect(lastResults[name]).toBe(quantity);
+    });
+  });
+
+  test('장바구니에서 상품을 제거할 경우 해당 수량만큼 제외된다.', () => {
+    const testResults = { 콜라: 2, 감자칩: 1 };
+    const testInput = '[콜라-4],[감자칩-2]'.split(',');
+    const removeList = [
+      { name: '콜라', quantity: 2 },
+      { name: '감자칩', quantity: 1 },
+    ];
+    const cart = new Cart(testInput, productDB);
+
+    cart.removeProduct(removeList[0]);
+    cart.removeProduct(removeList[1]);
+
+    const productList = cart.getProductList();
+
+    productList.forEach(({ name, quantity }) => {
+      expect(testResults[name]).toBe(quantity);
+    });
+  });
+
+  test('장바구니에서 상품을 제거할 경우 수량이 0이라면 상품이 삭제된다.', () => {
+    const testResults = { 감자칩: 2 };
+    const testInput = '[콜라-4],[감자칩-2]'.split(',');
+    const cart = new Cart(testInput, productDB);
+
+    cart.removeProduct({ name: '콜라', quantity: 2 });
+    cart.removeProduct({ name: '콜라', quantity: 2 });
+
+    const productList = cart.getProductList();
+
+    productList.forEach(({ name, quantity }) => {
+      expect(testResults[name]).toBe(quantity);
     });
   });
 });
