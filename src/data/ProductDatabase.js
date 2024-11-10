@@ -12,14 +12,30 @@ class ProductDatabase {
     this.#data = parseCSV(productCSV);
   }
 
+  /** @param {Pick<Product, 'name' | 'quantity'>} product */
+  putProductQuantityByName({ name, quantity }) {
+    for (const { id, quantity: targetQuantity } of this.findByName({ name })) {
+      if (targetQuantity >= quantity) {
+        this.#data[id].quantity -= quantity;
+        break;
+      }
+
+      quantity -= targetQuantity;
+      this.#data[id].quantity = 0;
+    }
+  }
+
   /** @param {Pick<Product, 'name'>} query */
   findByName({ name }) {
     return this.#data.filter((product) => product.name === name);
   }
 
-  /** @param {Pick<Product, 'id'>} query */
+  /**
+   * @param {Pick<Product, 'id'>} query
+   * @returns {Product}
+   */
   findById({ id }) {
-    return this.#data[id];
+    return { ...this.#data[id] };
   }
 
   /** @param {(data: Product[]) => void} printer */
