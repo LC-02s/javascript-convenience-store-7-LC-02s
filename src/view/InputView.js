@@ -1,6 +1,10 @@
 import { Console } from '@woowacourse/mission-utils';
-import { PRODUCT_INPUT, ERROR_MESSAGE } from '../constants/index.js';
-import { Exception } from '../utils/index.js';
+import {
+  PRODUCT_INPUT,
+  CONFIRM_FLAG,
+  ERROR_MESSAGE,
+} from '../constants/index.js';
+import { Exception, getUserInputLoop } from '../utils/index.js';
 
 class InputView {
   static async readProductSelection() {
@@ -9,6 +13,31 @@ class InputView {
     const input = await InputView.#readUserInput(guide);
 
     return input.split(',');
+  }
+
+  /** @param {{ guide: string }} param */
+  static async #generateConfirmReader({ guide }) {
+    return await getUserInputLoop({
+      reader: async () => {
+        const message = `${guide} (${CONFIRM_FLAG.TRUE}/${CONFIRM_FLAG.FALSE})`;
+        const input = await InputView.#readUserInput(message);
+
+        return InputView.#parseBooleanResponse(input);
+      },
+    });
+  }
+
+  /** @param {string} value */
+  static #parseBooleanResponse(value) {
+    if (value === CONFIRM_FLAG.TRUE) {
+      return true;
+    }
+
+    if (value === CONFIRM_FLAG.FALSE) {
+      return false;
+    }
+
+    throw new Exception(ERROR_MESSAGE.INVALID_TYPE);
   }
 
   static async #readUserInput(message) {
