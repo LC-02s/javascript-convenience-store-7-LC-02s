@@ -4,10 +4,12 @@ import { formatKRW } from '../utils/index.js';
 /** @typedef {import('../types/index.js').Product} Product */
 
 class OutputView {
-  /** @param {Product[]} products */
-  static printProductAll(products) {
+  /** @param {Product[]} productList */
+  static printProductAll(productList) {
     OutputView.#printProductGuideComment();
-    products.forEach(OutputView.#printProduct);
+    productList.forEach((product) => {
+      Console.print(OutputView.#getProductGuide(product));
+    });
   }
 
   static #printProductGuideComment() {
@@ -16,10 +18,12 @@ class OutputView {
   }
 
   /** @param {Omit<Product, 'id'>} product */
-  static #printProduct({ name, price, quantity, promotion }) {
-    Console.print(
-      `- ${name} ${formatKRW(price)}원 ${quantity}개 ${promotion ?? ''}`,
-    );
+  static #getProductGuide({ name, price, quantity, promotion }) {
+    if (!quantity) {
+      return `- ${name} ${formatKRW(price)}원 재고 없음 ${promotion ?? ''}`;
+    }
+
+    return `- ${name} ${formatKRW(price)}원 ${quantity}개 ${promotion ?? ''}`;
   }
 }
 
