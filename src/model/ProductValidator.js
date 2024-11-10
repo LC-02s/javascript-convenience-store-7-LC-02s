@@ -68,14 +68,14 @@ class ProductValidator {
   /** @param {string} input */
   static #validateProductInputPrefix(input) {
     if (!input.startsWith(PRODUCT_INPUT.PREFIX)) {
-      throw new Exception(ERROR_MESSAGE.INVALID_PRODUCT);
+      throw new Exception(ERROR_MESSAGE.INVALID_TYPE);
     }
   }
 
   /** @param {string} input */
   static #validateProductInputPostfix(input) {
     if (!input.endsWith(PRODUCT_INPUT.POSTFIX)) {
-      throw new Exception(ERROR_MESSAGE.INVALID_PRODUCT);
+      throw new Exception(ERROR_MESSAGE.INVALID_TYPE);
     }
   }
 
@@ -86,7 +86,7 @@ class ProductValidator {
       .filter((char) => char === PRODUCT_INPUT.SEPARATOR);
 
     if (separators.length !== 1) {
-      throw new Exception(ERROR_MESSAGE.INVALID_PRODUCT);
+      throw new Exception(ERROR_MESSAGE.INVALID_TYPE);
     }
   }
 
@@ -99,18 +99,18 @@ class ProductValidator {
   /** @param {string} name */
   static #validateProductNameType(name) {
     if (!name) {
-      throw new Exception(ERROR_MESSAGE.INVALID_PRODUCT);
+      throw new Exception(ERROR_MESSAGE.INVALID_TYPE);
     }
   }
 
   /** @param {number} quantity */
   static #validateProductQuantityType(quantity) {
     if (Number.isNaN(quantity) || !Number.isSafeInteger(quantity)) {
-      throw new Exception(ERROR_MESSAGE.INVALID_PRODUCT);
+      throw new Exception(ERROR_MESSAGE.INVALID_TYPE);
     }
 
     if (quantity < 1) {
-      throw new Exception(ERROR_MESSAGE.INVALID_PRODUCT);
+      throw new Exception(ERROR_MESSAGE.INVALID_TYPE);
     }
   }
 
