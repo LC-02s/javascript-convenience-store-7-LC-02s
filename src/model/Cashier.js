@@ -28,6 +28,27 @@ class Cashier {
     this.#checker = promotionChecker;
   }
 
+  /** @param {() => Promise<boolean>} checkMember */
+  async compute(checkMember) {
+    const totalPurchaseAmount = this.#computeTotalPurchaseAmount();
+    const giftList = this.#divideGiftList();
+
+    return {
+      totalPurchaseAmount,
+      giftList,
+      totalQuantity: this.#computeTotalPurchaseQuantity(),
+      promotionDiscount: this.#computePromotionDiscount(giftList),
+      membershipDiscount: await this.#computeMembershipDiscount({ totalPurchaseAmount, checkMember }),
+    };
+  }
+
+  computePayment({ totalPurchaseAmount = 0, promotionDiscount = 0, membershipDiscount = 0 }) {
+    const totalDiscount = promotionDiscount + membershipDiscount;
+    const result = totalPurchaseAmount - totalDiscount;
+
+    return result;
+  }
+
   #computeTotalPurchaseAmount() {
     return this.#productList.reduce((total, { name, quantity }) => {
       const unit = this.#productDB.findPriceByName({ name }) ?? 0;
