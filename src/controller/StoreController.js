@@ -65,27 +65,20 @@ class StoreController {
 
   /** @param {Pick<Product, 'name' | 'quantity'>} product */
   async #confirmPurchaseWithoutDiscount(product) {
-    return await this.#generateUserConfirmAction({
-      confirmReader: () => InputView.confirmPurchaseWithoutDiscount(product),
-      action: () => this.#cart.removeProduct(product),
-    });
+    const without = await InputView.confirmPurchaseWithoutDiscount(product);
+
+    if (!without) {
+      this.#cart.removeProduct(product);
+    }
   }
 
   /** @param {Pick<Product, 'name' | 'quantity'>} product */
   async #confirmAdditionalFreeProduct(product) {
-    return await this.#generateUserConfirmAction({
-      confirmReader: () => InputView.confirmAdditionalFreeProduct(product),
-      action: () => this.#cart.addProduct(product),
-    });
-  }
+    const intention = await InputView.confirmAdditionalFreeProduct(product);
 
-  /** @param {{ confirmReader: () => Promise<boolean>; action: () => void; }} param */
-  async #generateUserConfirmAction({ confirmReader, action }) {
-    const intention = await confirmReader();
-
-    if (!intention) return;
-
-    action();
+    if (intention) {
+      this.#cart.addProduct(product);
+    }
   }
 
   #payment() {
