@@ -31,6 +31,12 @@ class InputView {
     });
   }
 
+  static async confirmMembershipDiscount() {
+    return await InputView.#generateConfirmReader({
+      guide: '멤버십 할인을 받으시겠습니까?',
+    });
+  }
+
   /** @param {{ guide: string }} param */
   static async #generateConfirmReader({ guide }) {
     return await getUserInputLoop({
