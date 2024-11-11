@@ -1,5 +1,5 @@
 import { ProductDatabase } from '../data/index.js';
-import { Cart, ProductValidator, PromotionChecker } from '../model/index.js';
+import { Cart, ProductValidator, PromotionChecker, Cashier } from '../model/index.js';
 import { getUserInputLoop } from '../utils/index.js';
 import { InputView, OutputView } from '../view/index.js';
 
@@ -14,6 +14,9 @@ class StoreController {
 
   /** @type {PromotionChecker} */
   #promotionChecker;
+
+  /** @type {Cashier} */
+  #cashier;
 
   constructor() {
     this.#productDB = new ProductDatabase();
@@ -32,8 +35,18 @@ class StoreController {
 
   async #process() {
     const productList = await this.#addProductListToCart();
+
     await this.#checkProductPromotionAll(productList);
-    this.#payment();
+
+    await this.#payment();
+  }
+
+  async #addProductListToCart() {
+    const productInput = await this.#getProductSelection();
+
+    this.#cart = new Cart(productInput, this.#productDB);
+
+    return this.#cart.getProductList();
   }
 
   /** @param {Pick<Product, 'name' | 'quantity'>[]} productList */
@@ -48,6 +61,25 @@ class StoreController {
 
       await this.#recommendActionByPromotion(type)({ name, quantity });
     }
+  }
+
+  async #payment() {
+    const result = await this.#takeToTheCashier();
+    const productList = this.#cart.getProductList();
+
+    OutputView.printReceiptProductList({ productList, giftList: result.giftList });
+    OutputView.printReceiptResult({ ...result, payment: this.#cashier.computePayment(result) });
+
+    productList.forEach((product) => {
+      this.#productDB.putProductQuantityByName(product);
+    });
+  }
+
+  async #takeToTheCashier() {
+    const cart = this.#cart.getProductList();
+    this.#cashier = new Cashier(cart, this.#productDB, this.#promotionChecker);
+
+    return await this.#cashier.compute(InputView.confirmMembershipDiscount);
   }
 
   /**
@@ -81,29 +113,12 @@ class StoreController {
     }
   }
 
-  #payment() {
-    const productList = this.#cart.getProductList();
-
-    productList.forEach((product) => {
-      this.#productDB.putProductQuantityByName(product);
-    });
-  }
-
-  async #addProductListToCart() {
-    const productInput = await this.#getProductSelection();
-
-    this.#cart = new Cart(productInput, this.#productDB);
-
-    return this.#cart.getProductList();
-  }
-
   async #getProductSelection() {
     this.#productDB.printAll(OutputView.printProductAll);
 
     return await getUserInputLoop({
       reader: InputView.readProductSelection,
-      validator: (productList) =>
-        ProductValidator.validate(productList, this.#productDB),
+      validator: (productList) => ProductValidator.validate(productList, this.#productDB),
     });
   }
 }
