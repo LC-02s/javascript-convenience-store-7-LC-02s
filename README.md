@@ -1,6 +1,6 @@
 # javascript-convenience-store-precourse
 
-## 기능 목록
+## 📋 기능 목록
 
 - 상품 목록 출력 기능
   - 형식에 맞는 안내 문구 출력
@@ -95,3 +95,63 @@
     - 예외가 있을 경우 해당하는 예외 문구 출력 후 재입력 대기
   - 입력 값이 "Y"일 경우 상품 목록 출력 기능 재실행
   - 입력 값이 "N"일 경우 프로그램 종료
+
+<br />
+
+## 🌲 폴더 구조
+
+```
+📦
+├─ __tests__
+│  ├─ ApplicationTest.js
+│  ├─ CartTest.js
+│  ├─ CashierTest.js
+│  ├─ MembershipTest.js
+│  ├─ ProductDatabaseTest.js
+│  ├─ PromotionCheckerTest.js
+│  └─ PromotionDatabaseTest.js
+├─ public
+│  ├─ products.md
+│  └─ promotions.md
+└─ src
+   ├─ App.js
+   ├─ constants
+   │  ├─ confirm-flag.js
+   │  ├─ data-path.js
+   │  ├─ error-message.js
+   │  ├─ error-prefix.js
+   │  ├─ index.js
+   │  ├─ membership-discount.js
+   │  └─ product-input.js
+   ├─ controller
+   │  ├─ StoreController.js
+   │  └─ index.js
+   ├─ data
+   │  ├─ ProductDatabase.js
+   │  ├─ PromotionDatabase.js
+   │  └─ index.js
+   ├─ index.js
+   ├─ model
+   │  ├─ Cart.js
+   │  ├─ Cashier.js
+   │  ├─ Membership.js
+   │  ├─ ProductValidator.js
+   │  ├─ PromotionChecker.js
+   │  └─ index.js
+   ├─ types
+   │  ├─ Product.js
+   │  ├─ Promotion.js
+   │  └─ index.js
+   ├─ utils
+   │  ├─ Exception.js
+   │  ├─ formatKRW.js
+   │  ├─ getUserInputLoop.js
+   │  ├─ index.js
+   │  ├─ padding.js
+   │  ├─ parseCSV.js
+   │  └─ readFileSync.js
+   └─ view
+      ├─ InputView.js
+      ├─ OutputView.js
+      └─ index.js
+```
