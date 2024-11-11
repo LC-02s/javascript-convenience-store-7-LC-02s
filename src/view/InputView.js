@@ -37,6 +37,12 @@ class InputView {
     });
   }
 
+  static async confirmToBuyOtherProducts() {
+    return await InputView.#generateConfirmReader({
+      guide: '감사합니다. 구매하고 싶은 다른 상품이 있나요?',
+    });
+  }
+
   /** @param {{ guide: string }} param */
   static async #generateConfirmReader({ guide }) {
     return await getUserInputLoop({
