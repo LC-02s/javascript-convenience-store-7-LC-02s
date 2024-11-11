@@ -35,6 +35,11 @@ class ProductDatabase {
   }
 
   /** @param {Pick<Product, 'name'>} query */
+  findPriceByName({ name }) {
+    return this.#data.find((product) => product.name === name)?.price;
+  }
+
+  /** @param {Pick<Product, 'name'>} query */
   findByName({ name }) {
     return this.#data.filter((product) => product.name === name);
   }
