@@ -82,9 +82,7 @@ class ProductValidator {
 
   /** @param {string} input */
   static #validateProductInputSeparator(input) {
-    const separators = input
-      .split('')
-      .filter((char) => char === PRODUCT_INPUT.SEPARATOR);
+    const separators = input.split('').filter((char) => char === PRODUCT_INPUT.SEPARATOR);
 
     if (separators.length !== 1) {
       throw new Exception(ERROR_MESSAGE.INVALID_TYPE);

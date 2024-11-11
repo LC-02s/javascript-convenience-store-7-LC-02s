@@ -1,9 +1,5 @@
 import { Console } from '@woowacourse/mission-utils';
-import {
-  PRODUCT_INPUT,
-  CONFIRM_FLAG,
-  ERROR_MESSAGE,
-} from '../constants/index.js';
+import { PRODUCT_INPUT, CONFIRM_FLAG, ERROR_MESSAGE } from '../constants/index.js';
 import { Exception, getUserInputLoop } from '../utils/index.js';
 
 /** @typedef {import('../types/index.js').Product} Product */

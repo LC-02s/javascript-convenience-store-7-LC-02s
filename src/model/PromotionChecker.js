@@ -55,10 +55,7 @@ class PromotionChecker {
    * @param {{ product: Pick<Product, 'name' | 'quantity'>; promotion: Promotion; }} param
    * @returns {{ type: 'additional', quantity: number; } | null}
    */
-  #computeAdditionalProduct({
-    product: { quantity },
-    promotion: { get, buy },
-  }) {
+  #computeAdditionalProduct({ product: { quantity }, promotion: { get, buy } }) {
     const unit = buy + get;
     const count = Math.floor(quantity / unit);
     const rest = quantity - unit * count;
