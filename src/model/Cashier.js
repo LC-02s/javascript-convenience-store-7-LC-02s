@@ -42,6 +42,13 @@ class Cashier {
     }, 0);
   }
 
+  /** @param {Product[]} giftList */
+  #computePromotionDiscount(giftList) {
+    return giftList.reduce((total, { price, quantity }) => {
+      return total + price * quantity;
+    }, 0);
+  }
+
   /** @return {Product[]} */
   #divideGiftList() {
     return this.#productList.reduce((giftList, product) => {
