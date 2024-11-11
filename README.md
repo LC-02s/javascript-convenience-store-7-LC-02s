@@ -160,8 +160,10 @@
 
 ## 🖥️ 실행 화면
 
-<img width="768" alt="image" src="https://github.com/user-attachments/assets/ce494beb-9cda-4993-8772-b41c8ca8f16f">
-<img width="768" alt="image" src="https://github.com/user-attachments/assets/4f587d63-88c5-43dc-9f46-6c52c82fe8d8">
-<img width="768" alt="image" src="https://github.com/user-attachments/assets/22afc858-28d2-47d9-b79f-794d0752139b">
-<img width="768" alt="image" src="https://github.com/user-attachments/assets/f78e2d1e-3985-4a98-9617-d98393f90e4b">
+<img width="860" alt="실행 화면 1" src="https://github.com/user-attachments/assets/5157b6e9-807c-4b42-bcc6-8163a966e8dc">
+
+<img width="860" alt="실행 화면 2" src="https://github.com/user-attachments/assets/76ff88b5-3147-4cdc-b1a6-763a88aed63f">
+
+<img width="860" alt="실행 화면 3" src="https://github.com/user-attachments/assets/b34d62d0-94b0-44cd-9913-8a483b15015a">
+
 
