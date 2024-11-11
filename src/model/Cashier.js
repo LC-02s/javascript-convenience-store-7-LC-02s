@@ -1,5 +1,6 @@
 import { ProductDatabase } from '../data/index.js';
 import PromotionChecker from './PromotionChecker.js';
+import Membership from './Membership.js';
 
 /**
  * @typedef {import('../types/index.js').Product} Product
@@ -93,6 +94,18 @@ class Cashier {
     const count = Math.floor(quantity / unit);
 
     return get * count;
+  }
+
+  /** @param {{ totalPurchaseAmount: number; checkMember: () => Promise<boolean>; }} param */
+  async #computeMembershipDiscount({ totalPurchaseAmount, checkMember }) {
+    const isMember = await checkMember();
+    const { discounted } = Membership.computeDiscount(totalPurchaseAmount);
+
+    if (!isMember) {
+      return 0;
+    }
+
+    return discounted;
   }
 }
 
