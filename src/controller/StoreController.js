@@ -33,6 +33,7 @@ class StoreController {
   async #process() {
     const productList = await this.#addProductListToCart();
     await this.#checkProductPromotionAll(productList);
+    this.#payment();
   }
 
   /** @param {Pick<Product, 'name' | 'quantity'>[]} productList */
@@ -85,6 +86,14 @@ class StoreController {
     if (!intention) return;
 
     action();
+  }
+
+  #payment() {
+    const productList = this.#cart.getProductList();
+
+    productList.forEach((product) => {
+      this.#productDB.putProductQuantityByName(product);
+    });
   }
 
   async #addProductListToCart() {
