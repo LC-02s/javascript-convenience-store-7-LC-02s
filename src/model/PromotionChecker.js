@@ -25,12 +25,11 @@ class PromotionChecker {
    */
   recommend(product) {
     const promotionProduct = this.#productDB.findWithPromotionByName(product);
+    const promotion = this.getValidPromotion(promotionProduct?.promotion ?? '');
 
-    if (!promotionProduct) return null;
-
-    const promotion = this.#getValidPromotion(promotionProduct.promotion);
-
-    if (!promotion) return null;
+    if (!promotion) {
+      return null;
+    }
 
     return this.#computeResult({ product, promotionProduct, promotion });
   }
@@ -72,7 +71,7 @@ class PromotionChecker {
   }
 
   /** @param {Promotion['name']} name */
-  #getValidPromotion(name) {
+  getValidPromotion(name) {
     const promotion = this.#promotionDB.findByName({ name });
 
     if (!promotion || !this.#isValidPromotion(promotion)) {
