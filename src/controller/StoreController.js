@@ -1,4 +1,4 @@
-import { ProductDatabase, PromotionDatabase } from '../data/index.js';
+import { ProductDatabase } from '../data/index.js';
 import { Cart, ProductValidator } from '../model/index.js';
 import { getUserInputLoop } from '../utils/index.js';
 import { InputView, OutputView } from '../view/index.js';
@@ -7,17 +7,23 @@ class StoreController {
   /** @type {ProductDatabase} */
   #productDB;
 
-  /** @type {PromotionDatabase} */
-  #promotionDB;
+  /** @type {Cart} */
+  #cart;
 
   constructor() {
     this.#productDB = new ProductDatabase();
-    this.#promotionDB = new PromotionDatabase();
   }
 
   async run() {
-    const productList = await this.#getProductSelection();
-    const cart = new Cart(productList, this.#productDB);
+    const productList = await this.#addProductListToCart();
+  }
+
+  async #addProductListToCart() {
+    const productInput = await this.#getProductSelection();
+
+    this.#cart = new Cart(productInput, this.#productDB);
+
+    return this.#cart.getProductList();
   }
 
   async #getProductSelection() {
