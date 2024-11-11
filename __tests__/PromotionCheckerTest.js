@@ -49,7 +49,7 @@ describe('프로모션 클래스 테스트', () => {
     ],
   ])('%s', (_, testInputs) => {
     testInputs.forEach(([testInput, expectedOutput]) => {
-      const result = checker.compare(testInput);
+      const result = checker.recommend(testInput);
       expect(JSON.stringify(result)).toBe(expectedOutput);
     });
   });
@@ -59,7 +59,7 @@ describe('프로모션 클래스 테스트', () => {
 
     mockNowDate('2024-02-01');
 
-    const result = checker.compare({ name: '감자칩', quantity: 2 });
+    const result = checker.recommend({ name: '감자칩', quantity: 2 });
 
     expect(result).toBe(null);
 

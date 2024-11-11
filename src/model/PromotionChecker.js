@@ -23,7 +23,7 @@ class PromotionChecker {
    * @param {Pick<Product, 'name' | 'quantity'>} product
    * @returns {{ type: 'stock' | 'additional', quantity: number; } | null}
    */
-  compare(product) {
+  recommend(product) {
     const promotionProduct = this.#productDB.findWithPromotionByName(product);
 
     if (!promotionProduct) return null;
