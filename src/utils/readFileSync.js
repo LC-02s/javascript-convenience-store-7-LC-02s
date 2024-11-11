@@ -1,4 +1,4 @@
-const fs = require('fs');
+import fs from 'fs';
 
 /** @param {string} path */
 function readFileSync(path) {
