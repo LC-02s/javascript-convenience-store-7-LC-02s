@@ -15,6 +15,16 @@ class StoreController {
   }
 
   async run() {
+    let intentionToPurchase = true;
+
+    while (intentionToPurchase) {
+      await this.#process();
+
+      intentionToPurchase = await InputView.confirmToBuyOtherProducts();
+    }
+  }
+
+  async #process() {
     const productList = await this.#addProductListToCart();
   }
 
