@@ -1,3 +1,4 @@
+import { ProductDatabase } from '../data/index.js';
 import { PRODUCT_INPUT, ERROR_MESSAGE } from '../constants/index.js';
 import { Exception } from '../utils/index.js';
 
