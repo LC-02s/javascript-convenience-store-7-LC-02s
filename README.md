@@ -155,3 +155,13 @@
       ├─ OutputView.js
       └─ index.js
 ```
+
+<br />
+
+## 🖥️ 실행 화면
+
+<img width="768" alt="image" src="https://github.com/user-attachments/assets/ce494beb-9cda-4993-8772-b41c8ca8f16f">
+<img width="768" alt="image" src="https://github.com/user-attachments/assets/4f587d63-88c5-43dc-9f46-6c52c82fe8d8">
+<img width="768" alt="image" src="https://github.com/user-attachments/assets/22afc858-28d2-47d9-b79f-794d0752139b">
+<img width="768" alt="image" src="https://github.com/user-attachments/assets/f78e2d1e-3985-4a98-9617-d98393f90e4b">
+
