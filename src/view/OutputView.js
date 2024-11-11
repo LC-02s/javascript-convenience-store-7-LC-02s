@@ -38,11 +38,63 @@ class OutputView {
 
   /** @param {{ productList: Pick<Product, 'name' | 'quantity' | 'price'>[]; giftList: Pick<Product, 'name' | 'quantity'>[]; }} param */
   static printReceiptProductList({ productList, giftList }) {
-    Console.print(OutputView.#RECEIPT_TITLE);
+    Console.print('\n' + OutputView.#RECEIPT_TITLE);
     OutputView.#printReceiptColum();
     productList.forEach(OutputView.#printReceiptProduct);
     Console.print(OutputView.#RECEIPT_GIFT_TITLE);
     giftList.forEach(OutputView.#printReceiptProduct);
+  }
+
+  /** @param {{ totalPurchaseAmount: number; totalQuantity: number; promotionDiscount: number; membershipDiscount: number; payment: number; }} param */
+  static printReceiptResult({ totalPurchaseAmount, totalQuantity, promotionDiscount, membershipDiscount, payment }) {
+    Console.print(OutputView.#RECEIPT_TOTAL_TITLE);
+
+    OutputView.#printTotalPurchaseAmountAndQuantity({ totalPurchaseAmount, totalQuantity });
+    OutputView.#printDiscount({ promotion: promotionDiscount, membership: membershipDiscount });
+    OutputView.#printPayment(payment);
+  }
+
+  /** @param {{ totalPurchaseAmount: number; totalQuantity: number; }} param */
+  static #printTotalPurchaseAmountAndQuantity({ totalPurchaseAmount, totalQuantity }) {
+    const { NAME, QUANTITY, PRICE } = OutputView.#RECEIPT_PADDING;
+    const title = padRight('총 구매액', NAME);
+    const quantity = padRight(totalQuantity.toString(), QUANTITY);
+    const price = padLeft(formatKRW(totalPurchaseAmount), PRICE);
+
+    Console.print(title + quantity + price);
+  }
+
+  /** @param {{ promotion: number; membership: number; }} discount  */
+  static #printDiscount({ promotion, membership }) {
+    OutputView.#printPromotionDiscount(promotion);
+    OutputView.#printMembershipDiscount(membership);
+  }
+
+  /** @param {number} promotionDiscount  */
+  static #printPromotionDiscount(promotionDiscount) {
+    const { NAME, QUANTITY, PRICE } = OutputView.#RECEIPT_PADDING;
+    const title = padRight('행사할인', NAME);
+    const amount = `-${formatKRW(promotionDiscount)}`;
+
+    Console.print(title + padLeft(amount, QUANTITY + PRICE));
+  }
+
+  /** @param {number} membershipDiscount  */
+  static #printMembershipDiscount(membershipDiscount) {
+    const { NAME, QUANTITY, PRICE } = OutputView.#RECEIPT_PADDING;
+    const title = padRight('멤버십할인', NAME);
+    const amount = `-${formatKRW(membershipDiscount)}`;
+
+    Console.print(title + padLeft(amount, QUANTITY + PRICE));
+  }
+
+  /** @param {number} payment  */
+  static #printPayment(payment) {
+    const { NAME, QUANTITY, PRICE } = OutputView.#RECEIPT_PADDING;
+    const title = padRight('내실돈', NAME);
+    const amount = padLeft(formatKRW(payment), QUANTITY + PRICE);
+
+    Console.print(title + amount);
   }
 
   static #printReceiptColum() {
@@ -57,8 +109,7 @@ class OutputView {
   /** @param {Pick<Product, 'name' | 'quantity' | 'price'>} product */
   static #printReceiptProduct({ name, quantity, price }) {
     const { NAME, QUANTITY, PRICE } = OutputView.#RECEIPT_PADDING;
-    const printing =
-      padRight(name, NAME) + padRight(String(quantity), QUANTITY);
+    const printing = padRight(name, NAME) + padRight(String(quantity), QUANTITY);
 
     if (!price) {
       return Console.print(printing);
